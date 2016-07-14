@@ -1,5 +1,5 @@
 #Welcome to my little shiny app! @ Mihir Iyer
-#
+#oye!
 
 # data load & prep --------------------------------------------------------
 
@@ -12,15 +12,10 @@ library(metricsgraphics)
 sta <- xlsx::read.xlsx("~/Rprojects/MentalHealth/NepecPtsdDataDictionary.xlsx", sheetIndex=4, stringsAsFactors=FALSE)
 
 # create a data.frame with the Item (measure) defintions
-defs <- read.csv("~/Rprojects/MentalHealth/NepecPtsdDataDictionary-Edit_v2.0.csv", stringsAsFactors = FALSE)
+defs <- read.csv("~/Rprojects/MentalHealth/NepecPtsdDataDictionary-Edit.csv", stringsAsFactors = FALSE)
 
 #load le data
 mental <- jsonlite::fromJSON("~/Rprojects/MentalHealth/NEPEC_AnnualDataSheet_MH_FY15.json")
-
-# assign data types 
-# mental$Category <- factor(mental$Category)
-# mental$Item <- factor(mental$Item)
-# mental$ValueType <- factor(mental$ValueType)
 
 #combine mental and sta
 mental <- left_join(mental, sta, by="Station")
@@ -34,26 +29,16 @@ mental$Value <- gsub("%", "", mental$Value)
 mental$Value <- gsub(",", "", mental$Value)
 mental$Value <- as.numeric(mental$Value)
 
-# create a new variable to store a formatted as character data type for display in the data table
-TblVal <- character(nrow(mental))
-#add TblVal to the mental data frame
-mental <-data.frame(mental, TblVal, stringsAsFactors = FALSE)
-#add commas to Number value type and remove any white spaces
-mental$TblVal[which(mental$ValueType == "Number")] <- trimws(format(mental$Value[which(mental$ValueType == "Number")], big.mark = ",", drop0trailing = TRUE ), which="both")
-#add % sign to Percent value type
-mental$TblVal[which(mental$ValueType == "Percent")] <- paste(mental$Value[which(mental$ValueType == "Percent")], "%")
-#remove TblVal vector
-rm(TblVal)
-
 ### SHINY Bits ###
 
 # UI application --------------------------------------------------------
 
 ui <- shinyUI(fluidPage(theme = shinytheme("spacelab"),
-                      fluidRow(titlePanel("VA National Mental Health Statistics - 2015"), 
+                      fluidRow(titlePanel("VA National Mental Health Statistics Explorer"), 
                                style='padding:14px;'
                                ),
-                      fluidRow(column(textOutput("descNEPEC"),
+                      fluidRow(column("In April 2016, VA's Northeast Program Evaluation Center (NEPEC) released mental health statistics for fiscal year 2015 - the annual datasheet. This dataset consists of VA Medical Center level statistics on the prevalence, mental health utilization, non-mental health utilization, mental health workload, and psychological testing of Veterans with a possible or confirmed diagnosis of mental illness. This application is designed to help explore these mental health measures. To get started pick a measure category and then a measure to see the distribution and ranking of medical centers.",
+                                      br(),
                                       br(),
                                       a("Please visit the NEPEC website to learn more.", href="http://www.ptsd.va.gov/PTSD/about/divisions/evaluation/index.asp", target="_blank"),
                                       width=6, 
@@ -82,15 +67,17 @@ ui <- shinyUI(fluidPage(theme = shinytheme("spacelab"),
                         column(
                           conditionalPanel(
                             condition = "input.item != 'Select a measure'",
-                          h3("Distribution of VA Medical Centers"), 
+                               h3("Distribution of Medical Centers"), 
+                               em(h4(textOutput("histTitle"))),
                                metricsgraphicsOutput("histPlot")
                                 ), 
                                width=6),
                         column(
                           conditionalPanel(
                             condition = "input.item != 'Select a measure'",
-                          h3("VAMC-level Statistics"),
-                               dataTableOutput("rankTable")
+                              h3("Medical Center Results"),
+                              em(h4(textOutput("tblTitle"))),
+                              dataTableOutput("rankTable")
                                ), 
                           width=3
                         )
@@ -103,8 +90,6 @@ ui <- shinyUI(fluidPage(theme = shinytheme("spacelab"),
 
 server <- shinyServer(function(input, output){
   
-  # NEPEC BACKGROUND TEXT - create an output variable to display some background info on the NEPEC
-  output$descNEPEC <- renderText("VA's Northeast Program Evaluation Center (NEPEC) has broad responsibilities for evaluating mental health programs including PTSD clinical programs. In April 2016, NEPEC released mental health statistics for fiscal year 2015 - the annual datasheet. This dataset consists of VA Medical Center level statistics on the prevalence, mental health utilization, non-mental health utilization, mental health workload, and psychological testing of Veterans with a possible or confirmed diagnosis of mental illness.")
   
   # METHODOLOGICAL NOTES  - an output variable to display the methodological notes on the dataset
   output$methNotes01 <- renderText( "1. Compensation and pension exams and chart consults were included in all past reporting and the current Data Sheet, i.e. encounters in which one of the following stop codes are in the secondary position: 443- 448,450. Of the 95,557,325 total outpatient encounters in 2015, 1,101,782 (i.e. 1.2%) were such encounters.")
@@ -138,11 +123,24 @@ server <- shinyServer(function(input, output){
   #select definition of the measure for display
   output$defText <- renderText(userdef())
   
+  #PLOT SUBTITLE - create custom plot subtitle to indicate whether the measure is reported as a number or pecentage
+  subTitleText <- reactive({
+    unique(mental$ValueType[which(mental$Item == input$item)])
+  })
+  #for the table
+  output$tblTitle <- renderText(
+    paste("(Reported as a ", subTitleText(), ")", sep="")
+  )
+  #for the histogram
+  output$histTitle <- renderText(
+    paste("(Reported as a ", subTitleText(), ")", sep="")
+  )
 
   #DATASET - create a reactive dataset based on the selected Item
-  tbldata <- reactive({
+  zedata <- reactive({
     userdata <- filter(mental, Item==input$item)
-    userdata <- arrange(userdata, desc(Value))
+    userdata <- select(userdata, c(VISN, Station.Name, Value))
+    colnames(userdata) <- c("VISN", "Medical Center", "Value")
     return(userdata)
   })
 
@@ -150,26 +148,22 @@ server <- shinyServer(function(input, output){
   output$histPlot <- renderMetricsgraphics({
     #conditional statement to display dataTABLE when a measure is selected
     if(is.null(input$item)){return()
-    }else(mjs_plot(tbldata()$Value, format="count") %>% 
+    }else(mjs_plot(zedata()$Value, format="count") %>% 
             mjs_histogram(bins = 10) %>%
-            mjs_labs(x=input$item, y="Number of VAMCs")
+            mjs_labs(x=input$item, y="Number of VA Medical Centers")
     )
   })
 
   
   #RANKING TABLE - create a table that lists the facilities and their corresponding measure value
-  plotdata <- reactive({
-      mnky <- select(tbldata(), c(VISN, Station.Name, TblVal))
-      colnames(mnky) <- c("VISN", "Medical Center", "Value")
-      return(mnky)
-  })
-
+  
   output$rankTable <- renderDataTable({ 
     #conditional statement to display dataTABLE when a measure is selected
     if(is.null(input$item)){return()
-    }else(plotdata())
-    
-  })
+    }else(zedata()) 
+  }, options=list(order=list(2, 'desc'), 
+                  pageLength = 20
+  ))
   
 })
 
