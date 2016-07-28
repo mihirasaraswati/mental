@@ -69,9 +69,8 @@ ui <- shinyUI(fluidPage(theme = shinytheme("spacelab"),
                             condition = "input.item != 'Select a measure'",
                                h3("Distribution of Medical Centers"), 
                                em(h4(textOutput("histTitle"))),
-                               metricsgraphicsOutput("histPlot")
-                                ), 
-                               width=6),
+                               metricsgraphicsOutput("histPlot")),
+                          width=6),
                         column(
                           conditionalPanel(
                             condition = "input.item != 'Select a measure'",
@@ -157,14 +156,12 @@ server <- shinyServer(function(input, output){
   
   #RANKING TABLE - create a table that lists the facilities and their corresponding measure value
   
-  output$rankTable <- renderDataTable({ 
+  output$rankTable <- renderDataTable({
     #conditional statement to display dataTABLE when a measure is selected
     if(is.null(input$item)){return()
     }else(zedata()) 
   }, options=list(order=list(2, 'desc'), 
-                  pageLength = 20
-  ))
-  
+                  pageLength = 20))
 })
 
 # Run the application 
