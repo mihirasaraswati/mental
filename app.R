@@ -29,6 +29,12 @@ mental$Value <- gsub("%", "", mental$Value)
 mental$Value <- gsub(",", "", mental$Value)
 mental$Value <- as.numeric(mental$Value)
 
+#create a color vector for histogram
+
+mycolrs <- data.frame(Colors=c("#2c7bb6", "#fdae61", "#ffffbf", "#abd9e9", "#d7191c"),
+                      Category = sort(unique(mental$Category)),
+                      stringsAsFactors = FALSE)
+
 ### SHINY Bits ###
 
 # UI application --------------------------------------------------------
@@ -142,6 +148,14 @@ server <- shinyServer(function(input, output){
     colnames(userdata) <- c("VISN", "Medical Center", "Value")
     return(userdata)
   })
+  
+  #HISTOGRAM COLOR - select the color based on the category selected 
+  
+  mycolr <- renderText({
+    filter(mycolrs, Category == test) %>% 
+      select(Colors)
+  })
+  
 
   #HISTOGRAM PLOT - create a metricsgraphics hist plot
   output$histPlot <- renderMetricsgraphics({
