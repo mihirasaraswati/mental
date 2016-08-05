@@ -28,4 +28,4 @@ saveRDS(mental, "Data_Mental_Post.rds")
 saveRDS(defs, "Data_MeasureDefs.rds")
 
 #Cleanup workspace
-rm(mental, defs, sta)
+# rm(mental, defs, sta)
