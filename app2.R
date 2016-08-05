@@ -40,6 +40,16 @@ mycolrs <- data.frame(Colors=c("#2c7bb6", "#fdae61", "#ffffbf", "#abd9e9", "#d71
 # UI application --------------------------------------------------------
 
 ui <- shinyUI(fluidPage(theme = shinytheme("spacelab"),
+                        tags$head(
+                          tags$style(HTML("
+      .mg-histogram .mg-bar rect {
+          fill: #ff00ff;
+          shape-rendering: auto;
+      }
+
+      .mg-histogram .mg-bar rect.active {
+          fill: #00f0f0;
+      }"))),
                         fluidRow(titlePanel("VA National Mental Health Statistics Explorer"), 
                                  style='padding:14px;'
                         ),
