@@ -1,0 +1,3 @@
+The above histogram shows the distribution of VA facilities for the measure you selected. From this graph you can see the center and spread of facility measure values. You can also see if the values are skewed and if there are any outliers. 
+
+The horizontal or x-axis represents measure values and the vertical or y-axis shows the number of facilities. The width of each bar (or bin) of the represents a range of measure values and the height the number of facilities that fell within that range. If you hover your mouse over a bin the exact x-axis and y-axis values for that bin will be displayed in the top-right of the graph. 

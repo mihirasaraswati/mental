@@ -1,5 +1,6 @@
+# This script prepares the data for the shiny app. There two datasets one with the mental statistics and the other the definitions of the mental health measures. The files are saved as *.rds as they are more efficient than Excel. Enjoy!
+
 library(dplyr)
-library(metricsgraphics)
 
 #load station number - name -visn crosswalk from data dictionary
 sta <- xlsx::read.xlsx("NepecPtsdDataDictionary.xlsx", sheetIndex=4, stringsAsFactors=FALSE)
@@ -12,8 +13,7 @@ mental <- jsonlite::fromJSON("NEPEC_AnnualDataSheet_MH_FY15.json")
 
 #combine mental and sta
 mental <- left_join(mental, sta, by="Station")
-#remove sta data.frame
-rm(sta)
+
 #rearrange columns 
 mental <- mental[, c(6,3,7,1,2,4,5)]
 
@@ -22,17 +22,10 @@ mental$Value <- gsub("%", "", mental$Value)
 mental$Value <- gsub(",", "", mental$Value)
 mental$Value <- as.numeric(mental$Value)
 
-#create a color vector for histogram
 
-mycolrs <- data.frame(Colors=c("#2c7bb6", "#fdae61", "#ffffbf", "#abd9e9", "#d7191c"),
-                      Category = sort(unique(mental$Category)),
-                      stringsAsFactors = FALSE)
-items <-unique(mental$Item)
+#SAVE data
+saveRDS(mental, "Data_Mental_Post.rds")
+saveRDS(defs, "Data_MeasureDefs.rds")
 
-bardata <-  filter(mental, Item == items[1]) %>% 
-  arrange(Value)
-
-mjs_plot(data = bardata, x="Value", y="Station.Name") %>% 
-  mjs_bar(binned = FALSE) %>% 
-  mjs_axis_x(min_x =0, max_x=100) %>% 
-  mjs_axis_y()
+#Cleanup workspace
+rm(mental, defs, sta)
