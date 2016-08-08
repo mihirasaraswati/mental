@@ -8,7 +8,11 @@ sta <- xlsx::read.xlsx("NepecPtsdDataDictionary.xlsx", sheetIndex=4, stringsAsFa
 # create a data.frame with the Item (measure) defintions
 defs <- read.csv("NepecPtsdDataDictionary-Edit.csv", stringsAsFactors = FALSE)
 
-#load le data
+
+#read the data from catalog.data.gov 
+# mental <- jsonlite::fromJSON("https://raw.githubusercontent.com/vacobrydsk/VHA-Files/master/NEPEC_AnnualDataSheet_MH_FY15.json")
+
+#load le data locally (less resource intensive)
 mental <- jsonlite::fromJSON("NEPEC_AnnualDataSheet_MH_FY15.json")
 
 #combine mental and sta
