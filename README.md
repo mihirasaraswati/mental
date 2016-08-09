@@ -39,8 +39,8 @@ Alternatively, you run the application locally in RStudio by executing the follo
 + Relationship between *Category* and *Item* is not described in the data dictionary nor are the *Category* values defined. I dealt with this by extracting the unique *Category-Item* combinations from the dataset and added them to the data dictionary. I did not attempt to get *Category* definitions. 
 
 + In the above image you will also notice that there is a blank column (colored black) and a blank cell next to each *Element* heading. These were obviously not replicated in the custom data dictionary. 
-**Recap** - The custom data dictionary maps the following relationship: 
-Item (dataset) - Category (dataset) - ItemPrefix (dictionary) - Element (dictionary) - Definition (dictionary)
+
++ **Recap** - The custom data dictionary maps the following relationship: Item (dataset) - Category (dataset) - ItemPrefix (dictionary) - Element (dictionary) - Definition (dictionary)
 
 2. Added *VISN* and *Station.Name* to the mental health dataset.
 
