@@ -62,6 +62,8 @@ ui <- shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                      em(h4(textOutput("histTitle"))),
                                      metricsgraphicsOutput("histPlot"),
                                      br(),
+                                     tags$label("Summary:"),
+                                     verbatimTextOutput("summ"),
                                      tags$label("How to interpret:"),
                                      includeMarkdown("Interpret.md")
                                    ),
@@ -136,6 +138,8 @@ server <- shinyServer(function(input, output){
       select(Colors)
   })
   
+  #SUMMARY Stats for selected measure
+  output$summ<- renderPrint(summary(zedata()$Value))
   
   #HISTOGRAM PLOT - create a metricsgraphics hist plot
   output$histPlot <- renderMetricsgraphics({
