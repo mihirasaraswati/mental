@@ -27,20 +27,20 @@ Alternatively, you run the application locally in RStudio by executing the follo
 
 # Data preparation steps 
 
-1. Created a custom data dictionary. I needed to create a custom data dictionary due to the reasons mentioned above so that I could pull- definition into the Shiny application. All of the issues in the data dictionary and the remediation steps are described in detail below:
+1. Created a custom data dictionary to pull-in definitions into the Shiny application. All of the issues in the data dictionary and the remediation steps are described in detail below:
 
-+ The *Item* field in the dataset contains each measure, however, the data dictionary the term *Element* is used. These have been linked in the custom data dictionary. 
-+ Some of the *Elements* are grouped under a heading in the data dictionary. The verbiage of these headings is fused with the *Element* verbiage in the Item field of the dataset. For example, in the image below, on row 46 you can see the heading *Proportion of Veterans with Possible Mental Illness Seen in:*. Under this heading there are five *Elements*, however, in the dataset in the *Item* field you will see *Proportion of Veterans with Possible Mental Illness Seen in Any Mental Health*. To address this issue I had manually concatenated these terms so that I could link the *Item* values to its corresponding definitions. In the edited data dictionary I called the *Element* headings *ItemPrefix*.
+  + The *Item* field in the dataset contains each measure, however, the data dictionary the term *Element* is used. These have been linked in the custom data dictionary.
+  + Some of the *Elements* are grouped under a heading in the data dictionary. The verbiage of these headings is fused with the *Element* verbiage in the Item field of the dataset. For example, in the image below, on row 46 you can see the heading *Proportion of Veterans with Possible Mental Illness Seen in:*. Under this heading there are five *Elements*, however, in the dataset in the *Item* field you will see *Proportion of Veterans with Possible Mental Illness Seen in Any Mental Health*. To address this issue I had manually concatenated these terms so that I could link the *Item* values to its corresponding definitions. In the edited data dictionary I called the *Element* headings *ItemPrefix*.
 <br>
 <br>
 ![](images/Item_Element_Grouping.PNG)
 <br>
 <br>
-+ Relationship between *Category* and *Item* is not described in the data dictionary nor are the *Category* values defined. I dealt with this by extracting the unique *Category-Item* combinations from the dataset and added them to the data dictionary. I did not attempt to get *Category* definitions. 
+  + Relationship between *Category* and *Item* is not described in the data dictionary nor are the *Category* values defined. I dealt with this by extracting the unique *Category-Item* combinations from the dataset and added them to the data dictionary. I did not attempt to get *Category* definitions. 
 
-+ In the above image you will also notice that there is a blank column (colored black) and a blank cell next to each *Element* heading. These were obviously not replicated in the custom data dictionary. 
+  + In the above image you will also notice that there is a blank column (colored black) and a blank cell next to each *Element* heading. These were obviously not replicated in the custom data dictionary. 
 
-+ **Recap** - The custom data dictionary maps the following relationship: Item (dataset) - Category (dataset) - ItemPrefix (dictionary) - Element (dictionary) - Definition (dictionary)
+  + **Recap** - The custom data dictionary maps the following relationship: Item (dataset) - Category (dataset) - ItemPrefix (dictionary) - Element (dictionary) - Definition (dictionary)
 
 2. Added *VISN* and *Station.Name* to the mental health dataset.
 
