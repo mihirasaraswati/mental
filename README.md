@@ -1,9 +1,9 @@
 # Introduction
 
-Around April 2016, the Department of Veterans Affairs released a [dataset of medical center-level mental health statistics covering fiscal year 2015.](http://catalog.data.gov/dataset/va-national-mental-health-statistics-2015) These statistics aim to shed light on the prevalence, mental health utilization, non-mental health utilization, mental health workload, and psychological testing of Veterans with a possible or confirmed diagnosis of mental illness. These data are 
-prepared by the [VA Northeast Program Evaluation Center (NEPEC)](http://www.ptsd.va.gov/PTSD/about/divisions/evaluation/index.asp) which the organization responsible for evaluating VA's mental health programs. 
+The Mental Health Explorer is a small application that allows anyone to pick a mental health measure and view the values for all the VA facilities that were rated for that measure. The application will display a histogram  to help you visualize the distribution of measure values for all VA facilities where mental health services are provided. The application also has a sortable/searchable table to look-up scores for specific facilities. 
 
-The Mental Health Explorer is a simple application that allows anyone to pick a mental health measure and view the values for all the VA facilities that were rated for that measure. The application will show a histogram showing the distribution of measure values and provide a sortable/searchable table of facilities. 
+Around April 2016, the Department of Veterans Affairs released a [dataset of medical center-level mental health statistics covering fiscal year 2015.](http://catalog.data.gov/dataset/va-national-mental-health-statistics-2015) These statistics are collected to shed light on the prevalence, mental health utilization, non-mental health utilization, mental health workload, and psychological testing of Veterans with a possible or confirmed diagnosis of mental illness. These data are 
+prepared by the [VA Northeast Program Evaluation Center (NEPEC)](http://www.ptsd.va.gov/PTSD/about/divisions/evaluation/index.asp) which the organization responsible for evaluating VA's mental health programs. 
 
 # Data description
 
