@@ -12,10 +12,6 @@ library(metricsgraphics)
 mental <- readRDS("Data_Mental_Post.rds")
 defs <- readRDS("Data_MeasureDefs.rds")
 
-#create a color vector for histogram
-mycolrs <- data.frame(Colors=c("#2c7bb6", "#fdae61", "#ffffbf", "#abd9e9", "#d7191c"),
-                      Category = sort(unique(mental$Category)),
-                      stringsAsFactors = FALSE)
 
 ### SHINY Bits ###
 
@@ -128,18 +124,11 @@ server <- shinyServer(function(input, output){
   
   #DATASET - create a reactive dataset based on the selected Item
   zedata <- reactive({
-    userdata <- filter(mental, Item==input$item)
-    userdata <- select(userdata, c(VISN, Station.Name, Value))
-    colnames(userdata) <- c("VISN", "Medical Center", "Value")
-    return(userdata)
+    filter(mental, Item == input$item) %>% 
+      select(c(VISN, Station.Name, Value)) %>% 
+      rename(MedicalCenter = Station.Name)
   })
-  
-  #HISTOGRAM COLOR - select the color based on the category selected 
-  
-  mycolr <- renderText({
-    filter(mycolrs, Category == test) %>% 
-      select(Colors)
-  })
+
   
   #SUMMARY Stats for selected measure
   output$summ<- renderPrint(summary(zedata()$Value))
@@ -157,13 +146,12 @@ server <- shinyServer(function(input, output){
   
   #RANKING TABLE - create a table that lists the facilities and their corresponding measure value
   
-  output$rankTable <- renderDataTable({
+  output$rankTable <- renderDataTable(
     #conditional statement to display dataTABLE when a measure is selected
     if(is.null(input$item)){return()
     }else(zedata()) 
-  }, options=list(order=list(2, 'desc'), 
-                  pageLength = 25))
+  , options=list(order=list(2, 'desc'), pageLength = 25))
+  
 })
-
 # Run the application 
 shinyApp(ui = ui, server = server )
