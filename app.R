@@ -82,7 +82,6 @@ ui <- shinyUI(fluidPage(theme = shinytheme("cosmo"),
                         )
 
 # SERVER logic ---------------------
-
 server <- shinyServer(function(input, output){
   
   
@@ -105,9 +104,9 @@ server <- shinyServer(function(input, output){
   )
   
   #MEASURE DEFINITION - display the definition of the selected measure
-  userdef <- reactive(defs$Definition[which(defs$Item == input$item)])
+  # userdef <- reactive(defs$Definition[which(defs$Item == input$item)])
   #select definition of the measure for display
-  output$defText <- renderText(userdef())
+  output$defText <- renderText(defs$Definition[which(defs$Item == input$item)])
   
   #PLOT SUBTITLE - create custom plot subtitle to indicate whether the measure is reported as a number or pecentage
   subTitleText <- reactive({
@@ -128,8 +127,8 @@ server <- shinyServer(function(input, output){
       select(c(VISN, Station.Name, Value)) %>% 
       rename(MedicalCenter = Station.Name)
   })
-
   
+
   #SUMMARY Stats for selected measure
   output$summ<- renderPrint(summary(zedata()$Value))
   
