@@ -123,7 +123,7 @@ server <- shinyServer(function(input, output){
   
   #DATASET - create a reactive dataset based on the selected Item
   zedata <- reactive({
-    filter(mental, Item == input$item) %>% 
+    filter(mental, Item %in% input$item) %>% 
       select(c(VISN, Station.Name, Value)) %>% 
       rename(MedicalCenter = Station.Name)
   })
