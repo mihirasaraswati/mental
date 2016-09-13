@@ -82,8 +82,10 @@ ui <- shinyUI(fluidPage(theme = shinytheme("cosmo"),
                         )
 
 # SERVER logic ---------------------
-server <- shinyServer(function(input, output){
-  
+server <- function(input, output){
+  #suppressing warnings. for some reason the app was throwing an explicit id warning message. after researching it seems that suppressing the message won't have any adverse effect. See this for more details:
+  # https://github.com/hrbrmstr/metricsgraphics/issues/49
+  options(warn = -1)
   
   #CATEGORY PICKER - create drop-down box to allow picking a measure Category
   output$categoryBox <- renderUI(
@@ -147,10 +149,11 @@ server <- shinyServer(function(input, output){
     #conditional statement to display dataTABLE when a measure is selected
     if(is.null(input$item)){return()
     }else(zedata()) 
-  , options=list(order=list(2, 'desc'), pageLength = 25))
+  , options=list(order=list(2, 'desc'), pageLength = 25)
+  )
   
-})
-
+  
+}
 
 # Run the application 
-shinyApp(ui = ui, server = server )
+shinyApp(ui = ui, server = server)
