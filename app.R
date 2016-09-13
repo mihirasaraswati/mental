@@ -104,7 +104,6 @@ server <- shinyServer(function(input, output){
   )
   
   #MEASURE DEFINITION - display the definition of the selected measure
-  # userdef <- reactive(defs$Definition[which(defs$Item == input$item)])
   #select definition of the measure for display
   output$defText <- renderText(defs$Definition[which(defs$Item == input$item)])
   
@@ -133,18 +132,17 @@ server <- shinyServer(function(input, output){
   output$summ<- renderPrint(summary(zedata()$Value))
   
   #HISTOGRAM PLOT - create a metricsgraphics hist plot
-  output$histPlot <- renderMetricsgraphics({
+    output$histPlot <- renderMetricsgraphics({
     #conditional statement to display dataTABLE when a measure is selected
     if(is.null(input$item)){return()
-    }else(mjs_plot(zedata()$Value, format="count") %>% 
+    }else(mjs_plot(zedata()$Value, format="count") %>%
             mjs_histogram(bins = 10) %>%
             mjs_labs(x=input$item, y="Number of VA Medical Centers")
     )
   })
-  
-  
+
+
   #RANKING TABLE - create a table that lists the facilities and their corresponding measure value
-  
   output$rankTable <- renderDataTable(
     #conditional statement to display dataTABLE when a measure is selected
     if(is.null(input$item)){return()
@@ -152,5 +150,7 @@ server <- shinyServer(function(input, output){
   , options=list(order=list(2, 'desc'), pageLength = 25))
   
 })
+
+
 # Run the application 
 shinyApp(ui = ui, server = server )
