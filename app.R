@@ -33,10 +33,10 @@ ui <- shinyUI(fluidPage(theme = shinytheme("cosmo"),
                         fluidRow(titlePanel("VA National Mental Health Statistics Explorer"), 
                                  style='padding:14px;'
                         ),
-                        fluidRow(column(includeMarkdown("NEPEC_Description.md"),
+                        fluidRow(column(includeMarkdown("Notes_NEPEC_Description.md"),
                                         width=6, 
                                         offset=0.5),
-                                 column(includeMarkdown("Add_Resources.md"),
+                                 column(includeMarkdown("Notes_Resources.md"),
                                         width=6, 
                                         offset=0.5)
                         ), 
@@ -51,7 +51,7 @@ ui <- shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                           )
                                         ),
                                         wellPanel(tags$label("Methodological notes"),
-                                                  includeMarkdown("Meth_Notes.md")
+                                                  includeMarkdown("Notes_Methods.md")
                                         ),
                                         width=3),
                                  column(
@@ -64,7 +64,7 @@ ui <- shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                      tags$label("Summary:"),
                                      verbatimTextOutput("summ"),
                                      tags$label("How to interpret:"),
-                                     includeMarkdown("Interpret.md")
+                                     includeMarkdown("Notes_Interpret.md")
                                    ),
                                    width=5),
                                  column(
