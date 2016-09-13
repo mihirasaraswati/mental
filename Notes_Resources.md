@@ -1,6 +1,8 @@
 **Additional Resources:**
 
-[Please visit the NEPEC website to learn more.](http://www.ptsd.va.gov/PTSD/about/divisions/evaluation/index.asp)
+ 
+<a href="http://www.ptsd.va.gov/PTSD/about/divisions/evaluation/index.asp" target="_blank">Please visit the NEPEC website to learn more.</a>
 
-[Get the code from GitHub.](https://github.com/mihiriyer/mental)
+<a href="https://github.com/mihiriyer/mental" target="_blank">Get the code from GitHub.</a>
+
 

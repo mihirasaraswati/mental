@@ -7,6 +7,7 @@ library(shiny)
 library(shinythemes)
 library(dplyr)
 library(metricsgraphics)
+library(markdown)
 
 #read data (rds files are prepared by the Code_Data_Prep.R script see github repo for deets)
 mental <- readRDS("Data_Mental_Post.rds")
