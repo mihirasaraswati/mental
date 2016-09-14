@@ -58,7 +58,7 @@ ui <- shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                  column(
                                    conditionalPanel(
                                      condition = "input.item != 'Select a measure'",
-                                     h3("Distribution of Medical Centers"), 
+                                     h3("Measure Distribution"), 
                                      em(h4(textOutput("histTitle"))),
                                      metricsgraphicsOutput("histPlot"),
                                      br(),
